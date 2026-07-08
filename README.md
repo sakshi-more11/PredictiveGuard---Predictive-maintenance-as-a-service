@@ -8,33 +8,6 @@ An AI-powered predictive maintenance platform that predicts Remaining Useful Lif
 - Docker & Docker Compose
 - Python 3.11+ (for local development)
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/sakshi-more11/PredictiveGuard---Predictive-maintenance-as-a-service.git
-   cd PredictiveGuard---Predictive-maintenance-as-a-service
-   ```
-
-2. **Copy environment file**
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Start services with Docker Compose**
-   ```bash
-   docker-compose up -d
-   ```
-
-4. **Initialize database**
-   ```bash
-   docker-compose exec api python -c "from app.database import init_db; init_db()"
-   ```
-
-5. **Access the API**
-   - API Docs: http://localhost:8000/docs
-   - MinIO Console: http://localhost:9001 (minioadmin/minioadmin)
-
 ## Features
 
 - **Sensor Data Ingestion**: Upload CSV or stream sensor data (temperature, vibration, pressure, etc.)
