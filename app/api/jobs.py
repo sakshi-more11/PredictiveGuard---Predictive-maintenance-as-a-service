@@ -4,10 +4,15 @@ import logging
 from app.database import get_db
 from app.models import TrainingJob
 from app.schemas import TrainingJobResponse
-from app.tasks.celery_app import celery_app
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/jobs", tags=["jobs"])
+
+@router.get("/")
+def list_jobs(db: Session = Depends(get_db)):
+    """Get all jobs"""
+    jobs = db.query(TrainingJob).order_by(TrainingJob.created_at.desc()).all()
+    return [TrainingJobResponse.model_validate(job) for job in jobs]
 
 @router.get("/{job_id}")
 def get_job_status(
@@ -22,6 +27,8 @@ def get_job_status(
     
     # Get Celery task status
     if job.celery_task_id:
+        from app.tasks.celery_app import celery_app
+
         celery_task = celery_app.AsyncResult(job.celery_task_id)
         task_status = celery_task.status
         task_result = celery_task.result if celery_task.successful() else None
@@ -53,4 +60,4 @@ def get_machine_jobs(
         TrainingJob.machine_id == machine_id
     ).order_by(TrainingJob.created_at.desc()).all()
     
-    return jobs
+    return [TrainingJobResponse.model_validate(job) for job in jobs]

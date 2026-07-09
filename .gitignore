@@ -57,4 +57,4 @@ htmlcov/
 Thumbs.db
 
 # Docker
-.dockerignore
+!.dockerignore

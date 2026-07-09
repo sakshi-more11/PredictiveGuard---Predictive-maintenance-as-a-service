@@ -1,12 +1,18 @@
 import os
 from typing import Optional
 from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        protected_namespaces=("settings_",),
+    )
+
     # API Settings
     api_title: str = os.getenv("API_TITLE", "PredictiveGuard")
     api_version: str = os.getenv("API_VERSION", "1.0.0")
@@ -62,9 +68,5 @@ class Settings(BaseSettings):
             if normalized in {"0", "false", "no", "off", "prod", "production", "release"}:
                 return False
         return value
-
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
 
 settings = Settings()

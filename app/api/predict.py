@@ -13,6 +13,12 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/predict", tags=["prediction"])
 
+@router.get("/")
+def list_predictions(db: Session = Depends(get_db)):
+    """Get recent predictions"""
+    predictions = db.query(Prediction).order_by(Prediction.created_at.desc()).limit(100).all()
+    return [PredictionResponse.model_validate(prediction) for prediction in predictions]
+
 @router.post("/")
 def make_prediction(
     request: PredictionRequest,
@@ -80,7 +86,7 @@ def make_prediction(
         
         logger.info(f"Prediction made: machine_id={request.machine_id}, rul={prediction_result['rul_estimate']}")
         
-        return PredictionResponse.from_orm(prediction)
+        return PredictionResponse.model_validate(prediction)
         
     except HTTPException:
         raise
@@ -102,4 +108,4 @@ def get_latest_prediction(
     if not prediction:
         raise HTTPException(status_code=404, detail="No predictions found")
     
-    return PredictionResponse.from_orm(prediction)
+    return PredictionResponse.model_validate(prediction)

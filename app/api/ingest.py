@@ -2,14 +2,14 @@ from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
 import pandas as pd
 import logging
+from io import StringIO
 from app.database import get_db
-from app.models import Machine, TrainingJob
-from app.schemas import IngestResponse
+from app.models import Machine
+from app.schemas import IngestResponse, MachineCreate
 from app.utils.storage import StorageManager
 from app.utils.validators import (
     validate_csv_format, validate_timestamp, validate_sensor_values
 )
-from app.tasks.worker_tasks import preprocess_sensor_data
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/ingest", tags=["ingest"])
@@ -30,7 +30,7 @@ async def upload_sensor_data(
         
         # Read file
         contents = await file.read()
-        df = pd.read_csv(pd.io.common.StringIO(contents.decode('utf-8')))
+        df = pd.read_csv(StringIO(contents.decode("utf-8")))
         
         # Validate CSV format
         valid, msg = validate_csv_format(df)
@@ -49,6 +49,8 @@ async def upload_sensor_data(
         file_path = StorageManager.save_csv(df, f"machine_{machine_id}_raw.csv", "raw")
         
         # Enqueue preprocessing task
+        from app.tasks.worker_tasks import preprocess_sensor_data
+
         task = preprocess_sensor_data.delay(machine_id, file_path)
         
         logger.info(f"Upload processed: machine_id={machine_id}, task_id={task.id}, rows={len(df)}")
@@ -74,20 +76,17 @@ def list_machines(db: Session = Depends(get_db)):
     return machines
 
 @router.post("/machines")
-def create_machine(
-    name: str,
-    machine_type: str,
-    description: str = None,
-    location: str = None,
-    db: Session = Depends(get_db)
-):
+def create_machine(request: MachineCreate, db: Session = Depends(get_db)):
     """Create a new machine"""
+    existing = db.query(Machine).filter(Machine.name == request.name).first()
+    if existing:
+        raise HTTPException(status_code=409, detail="Machine name already exists")
     
     machine = Machine(
-        name=name,
-        machine_type=machine_type,
-        description=description,
-        location=location
+        name=request.name,
+        machine_type=request.machine_type,
+        description=request.description,
+        location=request.location
     )
     db.add(machine)
     db.commit()

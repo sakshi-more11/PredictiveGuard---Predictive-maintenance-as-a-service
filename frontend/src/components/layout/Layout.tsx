@@ -1,24 +1,25 @@
-import type { ReactNode } from "react";
-
-import Sidebar from "./SideBar";
+import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import { Outlet } from "react-router-dom";
 
-interface Props {
-  children: ReactNode;
-}
-
-export default function Layout({ children }: Props) {
+export default function Layout() {
   return (
     <div className="flex min-h-screen bg-slate-950">
+
       <Sidebar />
 
-      <div className="flex flex-col flex-1">
+      <div className="flex-1 flex flex-col">
+
         <Navbar />
 
-        <main className="p-8">
-          {children}
+        <main className="flex-1 overflow-y-auto p-8">
+
+          <Outlet />
+
         </main>
+
       </div>
+
     </div>
   );
 }

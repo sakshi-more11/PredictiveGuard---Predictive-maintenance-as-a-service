@@ -4,7 +4,6 @@ import logging
 from app.database import get_db
 from app.models import Machine, TrainingJob
 from app.schemas import TrainingJobCreate, TrainingJobResponse
-from app.tasks.worker_tasks import train_model
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/train", tags=["training"])
@@ -33,6 +32,8 @@ def start_training(
     db.refresh(training_job)
     
     # Enqueue task
+    from app.tasks.worker_tasks import train_model
+
     task = train_model.delay(
         request.machine_id,
         request.model_type,
@@ -46,7 +47,7 @@ def start_training(
     
     logger.info(f"Training job created: {training_job.id}, task_id={task.id}")
     
-    return TrainingJobResponse.from_orm(training_job)
+    return TrainingJobResponse.model_validate(training_job)
 
 @router.get("/{job_id}")
 def get_training_status(
@@ -59,4 +60,4 @@ def get_training_status(
     if not job:
         raise HTTPException(status_code=404, detail="Training job not found")
     
-    return TrainingJobResponse.from_orm(job)
+    return TrainingJobResponse.model_validate(job)

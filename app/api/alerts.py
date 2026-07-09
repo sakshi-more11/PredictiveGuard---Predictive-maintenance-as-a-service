@@ -8,6 +8,12 @@ from app.schemas import AlertCreate, AlertResponse
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/alerts", tags=["alerts"])
 
+@router.get("/")
+def list_alerts(db: Session = Depends(get_db)):
+    """Get all alert configurations"""
+    alerts = db.query(Alert).order_by(Alert.created_at.desc()).all()
+    return [AlertResponse.model_validate(alert) for alert in alerts]
+
 @router.post("/")
 def create_alert(
     request: AlertCreate,
@@ -33,7 +39,7 @@ def create_alert(
     
     logger.info(f"Alert created: alert_id={alert.id}, machine_id={request.machine_id}")
     
-    return AlertResponse.from_orm(alert)
+    return AlertResponse.model_validate(alert)
 
 @router.get("/machine/{machine_id}")
 def get_machine_alerts(
@@ -43,7 +49,7 @@ def get_machine_alerts(
     """Get all alerts for a machine"""
     
     alerts = db.query(Alert).filter(Alert.machine_id == machine_id).all()
-    return [AlertResponse.from_orm(alert) for alert in alerts]
+    return [AlertResponse.model_validate(alert) for alert in alerts]
 
 @router.put("/{alert_id}")
 def update_alert(
@@ -65,7 +71,7 @@ def update_alert(
     db.commit()
     db.refresh(alert)
     
-    return AlertResponse.from_orm(alert)
+    return AlertResponse.model_validate(alert)
 
 @router.delete("/{alert_id}")
 def delete_alert(

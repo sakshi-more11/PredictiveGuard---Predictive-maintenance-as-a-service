@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
@@ -48,14 +48,18 @@ class SensorReading(SensorReadingBase):
 
 # Training Job Schemas
 class TrainingJobCreate(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     machine_id: int
     model_type: str  # "prophet", "deepar", "tft"
     parameters: Optional[Dict[str, Any]] = None
 
 class TrainingJobResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+
     id: int
     machine_id: int
-    celery_task_id: str
+    celery_task_id: Optional[str] = None
     model_type: str
     status: str
     started_at: Optional[datetime] = None
@@ -64,10 +68,9 @@ class TrainingJobResponse(BaseModel):
     error_message: Optional[str] = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 class TrainingJobStatus(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     id: int
     celery_task_id: str
     status: str
@@ -77,6 +80,8 @@ class TrainingJobStatus(BaseModel):
 
 # Model Schemas
 class ModelResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+
     id: int
     name: str
     version: str
@@ -86,15 +91,16 @@ class ModelResponse(BaseModel):
     is_active: bool
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 # Prediction Schemas
 class PredictionRequest(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     machine_id: int
     horizon_days: int = Field(30, ge=1, le=365)
 
 class PredictionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+
     id: int
     machine_id: int
     model_id: int
@@ -106,9 +112,6 @@ class PredictionResponse(BaseModel):
     top_features: Optional[List[Dict[str, float]]] = None
     prediction_horizon_days: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 # Alert Schemas
 class AlertCreate(BaseModel):
