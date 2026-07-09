@@ -44,16 +44,21 @@ PredictiveGuard is an AI-powered predictive maintenance platform that analyzes i
 
 The main dashboard provides a real-time overview of machine health, asset status, risk score, maintenance insights, and key operational metrics.
 
-<p align="center">
-  <img src="C:\Users\ASUS\Pictures\Screenshots\dashboard-main.png.png" width="100%">
-</p>
----
+<img width="1917" height="965" alt="dashboard-main png" src="https://github.com/user-attachments/assets/63d73b7b-4119-4d4f-8eda-6edce1bf3d17" />
 
+---
 ## 📊 Dashboard Analytics
 
 Displays live sensor telemetry, Remaining Useful Life forecasting, asset health, model registry, and data pipeline status.
+<img width="1917" height="956" alt="dashboard-analytics png" src="https://github.com/user-attachments/assets/6096c479-bacf-4a1a-be1a-ab3ecbc07b76" />
 
-![Analytics Dashboard](images/dashboard-analytics.png)
+---
+
+## 📖 Backend API Documentation
+
+PredictiveGuard provides a RESTful FastAPI backend with interactive Swagger documentation for testing every endpoint, including dataset upload, model training, prediction generation, job monitoring, and machine management.
+
+<img width="1917" height="967" alt="FastAPI Swagger Documentation" src="https://github.com/user-attachments/assets/cb8f51f1-60e1-45f0-bf5a-f45a68215523" />
 
 ---
 
@@ -61,7 +66,7 @@ Displays live sensor telemetry, Remaining Useful Life forecasting, asset health,
 
 Upload industrial sensor datasets, register new assets, and preprocess data for model training.
 
-![Upload Dataset](images/upload-dataset.png)
+<img width="1920" height="1080" alt="upload-dataset png" src="https://github.com/user-attachments/assets/b13957fd-6595-45af-ba13-24f9787ea5fa" />
 
 ---
 
@@ -69,7 +74,7 @@ Upload industrial sensor datasets, register new assets, and preprocess data for 
 
 Configure maintenance alerts using failure probability and Remaining Useful Life thresholds.
 
-![Alerts](images/alerts.png)
+<img width="1917" height="858" alt="alerts png" src="https://github.com/user-attachments/assets/73ff1677-b155-452f-a3f2-a9dd99669e8c" />
 
 ---
 
@@ -77,7 +82,7 @@ Configure maintenance alerts using failure probability and Remaining Useful Life
 
 Configure backend connection, API endpoint, runtime settings, and monitor backend health.
 
-![Settings](images/settings.png)
+<img width="1917" height="965" alt="settings png" src="https://github.com/user-attachments/assets/6f355d72-6a92-4c5d-9584-9097fef8d1b3" />
 
 ---
 
