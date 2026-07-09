@@ -9,44 +9,10 @@ from app.core.training import ModelTrainer
 from app.core.model_registry import ModelRegistry
 from app.utils.storage import StorageManager
 from sqlalchemy.orm import Session
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-@celery_app.task(bind=True)
-def preprocess_sensor_data(self, machine_id: int, file_path: str):
-    """Preprocess uploaded sensor data"""
-    
-    try:
-        self.update_state(state='PROCESSING', meta={'current': 0, 'total': 3})
-        
-        # Load CSV
-        df = pd.read_csv(file_path)
-        logger.info(f"Loaded CSV: {df.shape}")
-        
-        # Preprocess
-        self.update_state(state='PROCESSING', meta={'current': 1, 'total': 3})
-        df = DataPreprocessor.preprocess_data(df, machine_id)
-        
-        # Engineer features
-        self.update_state(state='PROCESSING', meta={'current': 2, 'total': 3})
-        df = DataPreprocessor.engineer_features(df)
-        
-        # Save processed data
-        processed_path = StorageManager.save_csv(df, f"machine_{machine_id}_processed.csv", "processed")
-        
-        self.update_state(state='PROCESSING', meta={'current': 3, 'total': 3})
-        
-        return {
-            "status": "success",
-            "machine_id": machine_id,
-            "processed_path": processed_path,
-            "rows": len(df)
-        }
-        
-    except Exception as e:
-        logger.error(f"Preprocessing failed: {str(e)}")
-        self.update_state(state=states.FAILURE, meta={'error': str(e)})
-        raise
 
 @celery_app.task(bind=True)
 def train_model(self, machine_id: int, model_type: str = "prophet", training_job_id: int = None):
@@ -66,7 +32,7 @@ def train_model(self, machine_id: int, model_type: str = "prophet", training_job
         self.update_state(state='TRAINING', meta={'current': 0, 'total': 5})
         
         # Load processed data
-        df = pd.read_csv(f"./data/processed/machine_{machine_id}_processed.csv")
+        df = pd.read_csv(f"{settings.upload_folder}/processed/machine_{machine_id}_processed.csv")
         df['timestamp'] = pd.to_datetime(df['timestamp'])
         
         self.update_state(state='TRAINING', meta={'current': 1, 'total': 5})
@@ -132,6 +98,42 @@ def train_model(self, machine_id: int, model_type: str = "prophet", training_job
         
     finally:
         db.close()
+        
+@celery_app.task(bind=True)
+def preprocess_sensor_data(self, machine_id: int, file_path: str):
+    """Preprocess uploaded sensor data"""
+    
+    try:
+        self.update_state(state='PROCESSING', meta={'current': 0, 'total': 3})
+        
+        # Load CSV
+        df = pd.read_csv(file_path)
+        logger.info(f"Loaded CSV: {df.shape}")
+        
+        # Preprocess
+        self.update_state(state='PROCESSING', meta={'current': 1, 'total': 3})
+        df = DataPreprocessor.preprocess_data(df, machine_id)
+        
+        # Engineer features
+        self.update_state(state='PROCESSING', meta={'current': 2, 'total': 3})
+        df = DataPreprocessor.engineer_features(df)
+        
+        # Save processed data
+        processed_path = StorageManager.save_csv(df, f"machine_{machine_id}_processed.csv", "processed")
+        
+        self.update_state(state='PROCESSING', meta={'current': 3, 'total': 3})
+        
+        return {
+            "status": "success",
+            "machine_id": machine_id,
+            "processed_path": processed_path,
+            "rows": len(df)
+        }
+        
+    except Exception as e:
+        logger.error(f"Preprocessing failed: {str(e)}")
+        self.update_state(state=states.FAILURE, meta={'error': str(e)})
+        raise
 
 @celery_app.task
 def check_alerts():

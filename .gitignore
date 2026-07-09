@@ -1,60 +1,46 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-build/
-dist/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+*.pyo
+*.pyd
 *.egg-info/
-.installed.cfg
-*.egg
+
+# Virtual Environment
+venv/
+env/
+.pguard/
+.venv/
+
+# Environment variables
+.env
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Python cache
+.pytest_cache/
+.mypy_cache/
 
 # Node
 node_modules/
 frontend/node_modules/
-frontend/dist/
 
-# Data
-data/
-models/
-*.csv
-*.pkl
+# Build files
+dist/
+build/
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
+# Logs
+*.log
 
 # OS
 .DS_Store
 Thumbs.db
 
 # Docker
-!.dockerignore
+postgres_data/
+minio_data/
+
+# Model files (optional)
+*.pkl
+*.joblib

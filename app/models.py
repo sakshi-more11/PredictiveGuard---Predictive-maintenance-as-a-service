@@ -20,6 +20,8 @@ class Machine(Base):
     predictions = relationship("Prediction", back_populates="machine", cascade="all, delete-orphan")
     alerts = relationship("Alert", back_populates="machine", cascade="all, delete-orphan")
 
+    models = relationship("Model", back_populates="machine", cascade="all, delete-orphan")
+
 class SensorReading(Base):
     __tablename__ = "sensor_readings"
 
@@ -74,7 +76,7 @@ class Model(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    machine = relationship("Machine", back_populates="models")
     training_jobs = relationship("TrainingJob", back_populates="model")
     predictions = relationship("Prediction", back_populates="model")
 

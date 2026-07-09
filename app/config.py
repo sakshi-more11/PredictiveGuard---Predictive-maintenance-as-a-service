@@ -24,7 +24,7 @@ class Settings(BaseSettings):
         "DATABASE_URL",
         "postgresql://postgres:password@localhost:5432/predictive_guard"
     )
-    db_host: str = os.getenv("DB_HOST", "localhost")
+    db_host: str = os.getenv("DB_HOST", "postgres")
     db_port: int = int(os.getenv("DB_PORT", "5432"))
     db_name: str = os.getenv("DB_NAME", "predictive_guard")
     db_user: str = os.getenv("DB_USER", "postgres")

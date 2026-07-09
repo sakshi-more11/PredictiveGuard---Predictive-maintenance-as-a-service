@@ -91,7 +91,7 @@ services:
       - ./app:/app/app
       - ./data:/app/data
       - ./models:/app/models
-    command: celery -A app.tasks.celery_app.celery_app worker --loglevel=info
+    command: celery -A app.tasks.celery_app.celery_app beat --loglevel=info
 
   # Celery Beat (Scheduler)
   celery_beat:
@@ -107,8 +107,8 @@ services:
       - redis
       - celery_worker
     volumes:
-      - ./app:/app/app
-    command: celery -A app.tasks.celery_app.celery_app beat --loglevel=info
+    - ./app:/app/app
+    command: celery -A app.tasks.celery_app.celery_app worker --loglevel=info
 
   frontend:
     image: node:22-alpine

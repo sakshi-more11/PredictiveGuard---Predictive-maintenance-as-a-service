@@ -3,12 +3,21 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
 from app.config import settings
 
+
+
 # Create engine
-engine = create_engine(
-    settings.database_url,
-    echo=settings.debug,
-    poolclass=NullPool if settings.debug else None,
-)
+if settings.database_url.startswith("sqlite"):
+    engine = create_engine(
+        settings.database_url,
+        connect_args={"check_same_thread": False},
+        echo=settings.debug,
+    )
+else:
+    engine = create_engine(
+        settings.database_url,
+        echo=settings.debug,
+        poolclass=NullPool if settings.debug else None,
+    )
 
 # Session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
