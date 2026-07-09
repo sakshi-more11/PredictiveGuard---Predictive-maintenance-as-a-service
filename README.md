@@ -1,114 +1,128 @@
-# PredictiveGuard - Predictive Maintenance as a Service
+# 🚀 PredictiveGuard – Predictive Maintenance as a Service (PMaaS)
 
-An AI-powered predictive maintenance platform that predicts Remaining Useful Life (RUL), estimates failure risk, and automates maintenance alerts using FastAPI, Celery, Redis, PostgreSQL, MinIO, and Docker Compose.
+PredictiveGuard is an AI-powered predictive maintenance platform that analyzes industrial sensor data to estimate Remaining Useful Life (RUL), predict equipment failures, and generate proactive maintenance alerts. It enables organizations to reduce unexpected downtime, improve asset reliability, and optimize maintenance planning through machine learning and real-time analytics.
 
-## Quick Start
+---
 
-### Prerequisites
-- Docker & Docker Compose
-- Python 3.11+ (for local development)
+# ✨ Features
 
-## Features
+- 📊 Interactive Predictive Maintenance Dashboard
+- 📁 Sensor Dataset Upload & Preprocessing
+- 🤖 AI-Based Model Training (Prophet / Degradation Models)
+- 📈 Remaining Useful Life (RUL) Prediction
+- ⚠️ Failure Probability Prediction
+- 🔔 Configurable Maintenance Alerts
+- 📉 Analytics & Performance Monitoring
+- 🗄️ Model Registry
+- ⚙️ REST APIs using FastAPI
+- 🎨 Modern React Dashboard UI
 
-- **Sensor Data Ingestion**: Upload CSV or stream sensor data (temperature, vibration, pressure, etc.)
-- **Model Training**: Asynchronous training with Prophet, DeepAR, or custom models
-- **RUL Prediction**: Estimate Remaining Useful Life with confidence intervals
-- **Failure Probability**: Predict failure likelihood within configurable horizons
-- **Automated Alerts**: Webhook notifications and email alerts based on thresholds
-- **Model Registry**: Version control and lifecycle management for trained models
-- **Scheduled Retraining**: Automatic model retraining with cron or event-triggered jobs
-- **Monitoring**: Prometheus metrics, structured JSON logging, Sentry error tracking
+---
 
-## API Endpoints
+# 🛠️ Tech Stack
 
-### Machines
-- `POST /api/v1/ingest/machines` - Create a machine
-- `GET /api/v1/ingest/machines` - List all machines
+| Technology | Purpose |
+|------------|---------|
+| **React + TypeScript** | Interactive frontend dashboard |
+| **FastAPI** | High-performance backend REST APIs |
+| **Python** | Machine learning and backend logic |
+| **Pandas** | Sensor data preprocessing |
+| **NumPy** | Numerical computations |
+| **Prophet** | Remaining Useful Life forecasting |
+| **Scikit-Learn** | Degradation modeling and ML utilities |
+| **SQLAlchemy** | ORM for database operations |
+| **SQLite / PostgreSQL** | Data persistence |
+| **Celery** | Background model training tasks |
+| **Redis** | Celery broker and task queue |
+| **Plotly** | Interactive analytics visualizations |
 
-### Data Ingestion
-- `POST /api/v1/ingest/upload` - Upload sensor data CSV
+---
 
-### Training
-- `POST /api/v1/train/` - Start training job
-- `GET /api/v1/train/{job_id}` - Get training status
+# 📷 Project Screenshots
 
-### Predictions
-- `POST /api/v1/predict/` - Make a prediction
-- `GET /api/v1/predict/machine/{machine_id}` - Get latest prediction
+## 🏠 Dashboard Overview
 
-### Alerts
-- `POST /api/v1/alerts/` - Create alert configuration
-- `GET /api/v1/alerts/machine/{machine_id}` - List alerts for machine
-- `PUT /api/v1/alerts/{alert_id}` - Update alert
-- `DELETE /api/v1/alerts/{alert_id}` - Delete alert
+The main dashboard provides a real-time overview of machine health, asset status, risk score, maintenance insights, and key operational metrics.
 
-### Jobs
-- `GET /api/v1/jobs/{job_id}` - Get job status
-- `GET /api/v1/jobs/machine/{machine_id}` - Get machine's jobs
+<p align="center">
+  <img src="C:\Users\ASUS\Pictures\Screenshots\dashboard-main.png.png" width="100%">
+</p>
+---
 
-## Architecture
+## 📊 Dashboard Analytics
+
+Displays live sensor telemetry, Remaining Useful Life forecasting, asset health, model registry, and data pipeline status.
+
+![Analytics Dashboard](images/dashboard-analytics.png)
+
+---
+
+## 📁 Upload Sensor Dataset
+
+Upload industrial sensor datasets, register new assets, and preprocess data for model training.
+
+![Upload Dataset](images/upload-dataset.png)
+
+---
+
+## 🚨 Alert Management
+
+Configure maintenance alerts using failure probability and Remaining Useful Life thresholds.
+
+![Alerts](images/alerts.png)
+
+---
+
+## ⚙️ Application Settings
+
+Configure backend connection, API endpoint, runtime settings, and monitor backend health.
+
+![Settings](images/settings.png)
+
+---
+
+# 🧠 Machine Learning Workflow
 
 ```
-┌─────────────┐
-│   Client    │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────────────────────────────┐
-│   FastAPI (app/api)                 │
-│   - Routes & Endpoints              │
-│   - Request Validation              │
-└──────┬──────────────────────────────┘
-       │
-       ├──────────────────────┬──────────────────────┐
-       ▼                      ▼                      ▼
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│  PostgreSQL  │     │  Redis       │     │   MinIO      │
-│  (Metadata)  │     │  (Cache)     │     │  (Storage)   │
-└──────────────┘     └──────────────┘     └──────────────┘
-                            ▲
-                            │
-       ┌────────────────────┼────────────────────┐
-       ▼                    ▼                    ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│ Celery Worker   │ │ Celery Worker   │ │  Celery Beat    │
-│ (Training)      │ │ (Inference)     │ │  (Scheduling)   │
-└─────────────────┘ └─────────────────┘ └─────────────────┘
+Sensor Data
+      │
+      ▼
+Data Preprocessing
+      │
+      ▼
+Feature Engineering
+      │
+      ▼
+Model Training
+      │
+      ▼
+RUL Prediction
+      │
+      ▼
+Failure Probability
+      │
+      ▼
+Alert Generation
+      │
+      ▼
+Maintenance Decision Support
 ```
 
-## Development
+---
 
-### Local Setup
+# 🎯 Project Highlights
 
-1. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+- AI-powered predictive maintenance platform
+- Remaining Useful Life (RUL) forecasting
+- Failure probability estimation
+- Interactive React dashboard
+- Automated machine learning pipeline
+- Background task execution using Celery
+- RESTful FastAPI backend
+- Scalable architecture for industrial assets
 
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-3. **Run API server**
-   ```bash
-   uvicorn app.main:app --reload
-   ```
+# 👩‍💻 Developed By
 
-4. **Run Celery worker**
-   ```bash
-   celery -A app.tasks.celery_app worker --loglevel=info
-   ```
-
-5. **Run Celery Beat**
-   ```bash
-   celery -A app.tasks.celery_app beat --loglevel=info
-   ```
-
-### Running Tests
-
-```bash
-pytest tests/ -v --cov=app
-```
-
+**Sakshi More**
