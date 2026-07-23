@@ -1,4 +1,4 @@
-# 🚀 PredictiveGuard – Predictive Maintenance as a Service (PMaaS)
+# 🚀 PredictiveGuard – Predictive Maintenance as a Service 
 
 PredictiveGuard is an AI-powered predictive maintenance platform that analyzes industrial sensor data to estimate Remaining Useful Life (RUL), predict equipment failures, and generate proactive maintenance alerts. It enables organizations to reduce unexpected downtime, improve asset reliability, and optimize maintenance planning through machine learning and real-time analytics.
 
@@ -120,14 +120,9 @@ Maintenance Decision Support
 - AI-powered predictive maintenance platform
 - Remaining Useful Life (RUL) forecasting
 - Failure probability estimation
-- Interactive React dashboard
 - Automated machine learning pipeline
 - Background task execution using Celery
 - RESTful FastAPI backend
 - Scalable architecture for industrial assets
 
----
 
-# 👩‍💻 Developed By
-
-**Sakshi More**
